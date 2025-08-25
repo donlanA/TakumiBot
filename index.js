@@ -26,6 +26,12 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', jsonParser, function(req, res) {
+
+  if (!req.body || !req.body.events || !Array.isArray(req.body.events) || req.body.events.length === 0) {
+    res.status(200).end();
+    return;
+  }
+  
   let event = req.body.events[0];
   let type = event.type;
   let msgType = event.message.type;
