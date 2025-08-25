@@ -1,7 +1,7 @@
 {
-  "name": "leoli",
+  "name": "takumi",
   "version": "0.2.0",
-  "description": "LeoLi Line Bot",
+  "description": "Takumi Dice Bot Based on LeoLi",
   "engines": {
     "node": "6.9.1"
   },
@@ -17,7 +17,8 @@
   },
   "keywords": [
     "LeoLi",
-    "Line"
+    "Line",
+    "Discord"
   ],
   "license": "MIT"
 }

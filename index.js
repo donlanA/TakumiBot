@@ -33,6 +33,30 @@ discordClient.on('ready', () => {
     discordClient.user.setPresence({ activities: [{ name: '百日戰記 -最終防衛學園-' }], status: 'online' });
 });
 
+// 如果接收到新訊息
+discordClient.on('messageCreate', async msg => {
+
+    // 不要接收機器人的訊息
+    if (msg.author.bot)
+        return;
+
+    // 這裡 rplyToken 傳 null，inputStr 傳 msg.content
+    let reply = parseInput(null, msg.content);
+
+    // 如果有的話 reply 的內容一定大於 0
+    if (reply.length > 0) {
+        // 讓機器人回話
+        if (Array.isArray(reply)) {
+            // 只回傳第一個 type: "text" 的內容
+            let textMsg = reply.find(m => m.type === "text");
+            if (textMsg) msg.reply(textMsg.text);
+        } else if (typeof reply === 'string') {
+            msg.reply(reply);
+        }
+    }
+});
+
+
 // Discord Developer Portal 上 Bot 的 Token
 discordClient.login(process.env.DISCORD_TOKEN);
 
