@@ -55,7 +55,9 @@ discordClient.on('messageCreate', async msg => {
 
 
 // Discord Developer Portal 上 Bot 的 Token
-discordClient.login(process.env.DISCORD_TOKEN);
+// discordClient.login(process.env.DISCORD_TOKEN).catch(err => {
+//     console.error('Discord 登入失敗:', err);
+// });
 
 //------------------------------
 // Line Bot
@@ -121,6 +123,10 @@ app.post('/', jsonParser, function(req, res) {
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
+
+  discordClient.login(process.env.DISCORD_TOKEN).catch(err => {
+      console.error('Discord 登入失敗:', err);
+  });
 });
 
 function replyMsgToLine(rplyToken, rplyVal) {
