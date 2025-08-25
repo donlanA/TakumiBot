@@ -49,7 +49,7 @@ app.post('/', jsonParser, function(req, res) {
     console.log('Do not trigger'); 
   }
 
-  res.send('ok');
+  res.status(200).end();
 });
 
 app.listen(app.get('port'), function() {
