@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "Takumi Dice Bot Based on LeoLi",
   "engines": {
-    "node": "6.9.1"
+    "node": ">=16.9.0"
   },
   "main": "index.js",
 "scripts": {

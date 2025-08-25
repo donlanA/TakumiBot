@@ -1,2 +1,2 @@
 require('./linebot.js');
-// require('./discordbot.js');
+require('./discordbot.js');
