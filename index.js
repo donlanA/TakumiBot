@@ -76,7 +76,7 @@ var options = {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + process.env.LINE_TOKEN
+    'Authorization': 'Bearer HNprujxW6l55p7JhdIDM8p577oezwhMJHAvX2Zt0Hw7WP3SWFJpvPDWHHb9hbJl+HENp70CE27PIqKHj40sQGH5pDBmnshgJCs7dOPFmcNb/EFb3aeTXOj9BwYqILXtL5dBDPCFmTYY2VR+mdVgO8gdB04t89/1O/w1cDnyilFU='
     
   }
 }
@@ -186,14 +186,11 @@ function parseInput(rplyToken, inputStr) {
         //而這個函數最後return的也將會以文字訊息的方式回覆給使用者。
         //回傳非文字訊息的方式，下文會另外敘述。
   
-  
         //這一段不要理他，因為我看不懂，總之留著。
         console.log('InputStr: ' + inputStr);
         _isNaN = function(obj) {
           return isNaN(parseInt(obj));
         }
-        
-        
         
         //以下這一串是一連串的判定，用來判斷是否有觸發條件的關鍵字。
         
