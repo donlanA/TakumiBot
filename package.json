@@ -6,10 +6,9 @@
     "node": "6.9.1"
   },
   "main": "index.js",
-  "scripts": {
-    "start:line": "node linebot.js",
-    "start:discord": "node discordbot.js"
-  },
+"scripts": {
+  "start": "node index.js"
+},
   "dependencies": {
     "body-parser": "^1.20.3",
     "discord.js": "^14.22.1",
