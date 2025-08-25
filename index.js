@@ -1,5 +1,12 @@
 require('dotenv').config();
 
+process.on('uncaughtException', (err) => {
+    console.error('未捕捉例外:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('未處理的 Promise 拒絕:', reason);
+});
+
 // Discord Bot
 const { Client, GatewayIntentBits } = require('discord.js');
 
@@ -32,7 +39,6 @@ discordClient.on('ready', () => {
 
 // 如果接收到新訊息
 discordClient.on('messageCreate', async msg => {
-    // 如果是機器人自己發的訊息就忽略
     if (msg.author.bot) return;
 
     let reply = parseInput(null, msg.content);
@@ -49,9 +55,7 @@ discordClient.on('messageCreate', async msg => {
 
 
 // Discord Developer Portal 上 Bot 的 Token
-discordClient.login(process.env.DISCORD_TOKEN).catch(err => {
-    console.error('Discord 登入失敗:', err);
-});
+discordClient.login(process.env.DISCORD_TOKEN);
 
 //------------------------------
 // Line Bot
