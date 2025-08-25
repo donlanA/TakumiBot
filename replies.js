@@ -30,9 +30,11 @@ function parseInput(rplyToken, inputStr) {
         if (inputStr.toLowerCase().match(/^pb/)!= null) return pbta(inputStr.toLowerCase()) ;      
         else
 		
-	//這三個是偏向玩鬧型的功能，如果說只是要擲骰可以不管。
+        if (inputStr.match('塔庫米使用說明') != null) return TakumiManual() ;
+        else
+        
         //鴨霸獸指令開始於此
-        if (inputStr.match('鴨霸獸') != null) return YabasoReply(inputStr) ;
+        if (inputStr.match('takumi') != null) return TakumiReply(inputStr) ;
         else
 
 	//圖片訊息在此
@@ -55,7 +57,6 @@ function parseInput(rplyToken, inputStr) {
         else return undefined;
         
 }
-
 
 function DvTest(rplyToken, inputStr){
   let rePly = '開發者測試：\n';
@@ -93,7 +94,6 @@ return undefined;
 
 }
         
-
 //這可能是整個程式中最重要的一個函數。它是用來做「擲骰」的最基本部份，會一直被叫出來用。
 //它的功能是，打 Dice(6) ，就會像骰六面骰一樣骰出一個介於1和6間的整數。        
 function Dice(diceSided){
@@ -104,8 +104,6 @@ function Dice(diceSided){
   return Math.floor((Math.random() * diceSided) + 1)
 }              
         
-
-
 //這個就是通用擲骰啦！
 //但這是一個很大的東西，我拆成幾個不同的部分。
 //nomalDiceRoller是程式的最外圍，主要是做複數擲骰與否的判定和最終輸出，然後加上「基本擲骰」的字樣。
@@ -176,7 +174,6 @@ function nomalDiceRoller(inputStr){
   return finalStr;
 }
 
-        
 //這就是作計算的函數，負責把骰子算出來。
 function DiceCal(inputStr){
   
@@ -242,7 +239,6 @@ function RollDice(inputStr){
   return finalStr;
 }
 
-        
 //PBTA判定在這裡
 function pbta(inputStr){
   
@@ -439,7 +435,6 @@ function ccbg(){
 
 }
 
-        
 //這裡是cc指令，也就是CoC的主要擲骰控制位置。
 //這邊的程式碼沒有那麼複雜，所以應該不會講得那麼詳細，可以自己慢慢研究，不難懂的。
 function CoC7th(rplyToken, inputStr){
@@ -673,33 +668,36 @@ function SendImg(rplyToken, inputStr) {
   return undefined;
 }
 
-function YabasoReply(inputStr) { 
-  //一般功能說明
-  if (inputStr.match('說明') != null) return YabasoReply('0') + '\
-\n \
-\n總之現在應該支援直接的四則運算了，直接打：2d4+1、2D10+1d2\
-\n要多筆輸出就是先打你要的次數，再空一格打骰數：7 3d6、5 2d6+6  \
-\n現在打成大寫D，我也不會嗆你了哈哈哈。 \
-\n \
-\n目前支援多數CoC 7th指令，可打「鴨霸獸 cc」取得更多說明。 \
-\n初步支持pbta擲骰，語法為pb、pb+2。\
-\n \
-\n其他骰組我都用不到，所以不會去更新哈哈哈哈哈！ \
-\n以上功能靈感來源全部來自悠子桑的Hastur，那隻的功能超完整快加他： @fmc9490c \
-\n這隻的BUG超多，只會說垃圾話；可以問我垃圾話相關指令哦～\
-';
-  else
-  //垃圾話功能說明
-  if (inputStr.match('垃圾話') != null) return '\
-嗚呵呵呵呵，我就知道你們人類沒辦法抗拒垃圾話的。\
-\n目前實裝的垃圾話功能是以下這些：\
+function TakumiManual() {
+    //一般功能說明
+    return '\
+    \n \
+    \n呃……嗨。因為這樣那樣的原因，總而言之，我現在就負責擲骰了。\
+    \n喊出骰子的個數、面數，我就會幫你丟出結果，大家應該都很熟悉了吧。\
+    \n修正也交給我吧，簡單的加減運算我還是有信心的！例如：2d4+1、2D10+1d2\
+    \n需要多筆輸出的話，就先打次數再空一格打骰數。例如：7 3d6、5 2d6+6。\
+    \n對了，用大寫D或是小寫d都沒問題喔。 \
+    \n \
+    \n接下來，跟我聊天的指令是……「takumi」。有種似乎用了代稱又沒用的微妙感覺……\
+    \n總之，目前也支援多數CoC 7th指令，可打「takumi cc」取得更多說明。 \
+    \n初步支持pbta擲骰……這是什麼？不，沒事。語法為pb、pb+2。\
+    \n似乎還有一些額外功能，想知道的話就輸入「takumi 額外功能」吧。\
+    \n \
+    \n以上功能均繼承至RoboYabaso（HTKRPG的前身）！幫大忙了，謝謝！ \
+    ';
+}
+
+function TakumiReply(inputStr) { 
+  
+  //功能說明
+  if (inputStr.match('額外功能') != null) return '\
+我看看喔……目前實裝的功能有以下這些：\
 \n運勢：你只要提到我的名字和運勢，我就會回答你的運勢。 \
 \n==\
 \n隨機選擇：只要提到我的名字和[選、挑、決定]，然後空一格打選項。 \
-記得選項之間也要用空格隔開，我就會幫選擇障礙的你挑一個。\
+記得選項之間也要用空格隔開，我就會幫你挑一個。\
 \n \
-\n看起來很實用對不對～那為什麼會叫做垃圾話呢？\
-\n因為不管哪個功能都有可能會被嗆啊哈哈哈哈哈！\
+\n話說這種事交給我沒問題嗎？感覺更適合讓蒼月來做啊……那傢伙的特異科目不是占卜嘛。\
 ';
   else    
 
@@ -716,27 +714,26 @@ function YabasoReply(inputStr) {
 \n==\
 \n一鍵創角：「cc 創角/crt [年齡]」，\n若不加上年齡參數，則以悠子/冷嵐房規創角。若加上年齡，則以核心規則創角（含年齡調整）。\
 \n==\
-\n一鍵產生背景：「cc bg」，娛樂性質居多的調查員背景產生器\
+\n一鍵產生背景：「cc bg」，娛樂性質居多的調查員背景產生器。\
 ';
   else           
     
-  //鴨霸獸幫我選～～
+  //幫我選
   if(inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null) {
     let rplyArr = inputStr.split(' ');
     
-    if (rplyArr.length == 1) return '靠腰喔要我選也把選項格式打好好不好，真的想被淨灘嗎？';
+    if (rplyArr.length == 1) return '你好像還沒打完訊息的樣子？慢慢來也沒關係喔。';
     
     let Answer = rplyArr[Dice(rplyArr.length)-1];
-    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('鴨霸獸') != null) {
-      rplyArr = ['幹，你不會自己決定嗎',
-                 '人生是掌握在自己手裡的',
-                 '隨便哪個都好啦',
-                 '連這種東西都不能決定，是不是不太應該啊',
-                 '沒事別叫我選東西好嗎，難道你們都是天秤座嗎（戰）',
-                 '不要把這種東西交給機器人決定比較好吧'];
+    if(Answer.match('選') != null||Answer.match('決定') != null||Answer.match('挑') != null||Answer.match('takumi') != null) {
+      rplyArr = ['這個……你還是自己決定吧？',
+                 '人生是掌握在自己手裡的！……我的一位朋友曾經這麼說。',
+                 '總覺得沒有差很多……',
+                 '就算是我，也不想做這種選擇啊……',
+                 '不要把這種東西交給我決定比較好吧。'];
       Answer = rplyArr[Dice(rplyArr.length)-1];
     }
-    return '我想想喔……我覺得，' + Answer + '。';
+    return '我想想喔……我覺得，' + Answer + '吧。';
   }
    
   //以下是幫眾限定的垃圾話
