@@ -1,3 +1,43 @@
+require('dotenv').config();
+
+// Discord Bot
+const { Client, GatewayIntentBits } = require('discord.js');
+
+const discordClient = new Client({
+    intents:
+        [
+            // 基本事件
+            GatewayIntentBits.Guilds, 
+
+            // 排程事件
+            GatewayIntentBits.GuildScheduledEvents, 
+
+            // 聊天室如果有動作的事件
+            GatewayIntentBits.GuildMessages, 
+
+            // 接收聊天室內容的事件 → 需要到 Discord Developer Portal 把 MESSAGE CONTENT INTENT 打開
+            GatewayIntentBits.MessageContent, 
+
+            // 接收到反應的事件
+            GatewayIntentBits.GuildMessageReactions 
+        ]
+});
+
+
+
+
+discordClient.on('ready', () => {
+    // 設定我們的機器人狀態
+    // activities 的 name 是狀態的名稱
+    // status 是表示在線上或者忙碌中 目前是 online 也就是常常看到的綠燈
+    discordClient.user.setPresence({ activities: [{ name: '百日戰記 -最終防衛學園-' }], status: 'online' });
+});
+
+// Discord Developer Portal 上 Bot 的 Token
+discordClient.login(process.env.DISCORD_TOKEN);
+
+//------------------------------
+// Line Bot
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');  
@@ -12,7 +52,7 @@ var options = {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer HNprujxW6l55p7JhdIDM8p577oezwhMJHAvX2Zt0Hw7WP3SWFJpvPDWHHb9hbJl+HENp70CE27PIqKHj40sQGH5pDBmnshgJCs7dOPFmcNb/EFb3aeTXOj9BwYqILXtL5dBDPCFmTYY2VR+mdVgO8gdB04t89/1O/w1cDnyilFU='   
+    'Authorization': 'Bearer ' + process.env.LINE_TOKEN
     
   }
 }
@@ -112,9 +152,7 @@ function SendMsg(rplyToken, rplyVal) {
   request.end(rplyJson);
 }
 
-
-//上面的部分呢，是LINE BOT能夠運轉，和伺服器的一些連結與認證有關。坦白說有很多部份我也不太確定是幹嘛用的，不要亂動比較安全。
-        
+//------------------------------
 //以下是這個機器人在處理指令的核心。
 function parseInput(rplyToken, inputStr) {
         //此處傳入的變數inputStr是大家輸入的文字訊息。
