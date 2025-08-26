@@ -22,7 +22,7 @@ var options = {
 }
 
 router.get('/', (req, res) => {
-  res.send('Hello from LINE bot');
+  res.send('LINE bot');
 });
 
 router.post('/', jsonParser, function(req, res) {
