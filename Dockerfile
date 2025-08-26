@@ -18,4 +18,4 @@ EXPOSE 3000
 
 # 執行指令
 # 組起來是 node --expose-gc discordbot.js
-CMD ["node" , "--expose-gc" , "discordbot.js"]
+CMD ["node" , "--expose-gc" , "index.js"]
