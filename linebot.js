@@ -5,7 +5,7 @@ const { parseInput } = require('./replies.js');
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');  
-var app = express();
+const router = express.Router();
 
 var jsonParser = bodyParser.json();
 
@@ -20,16 +20,12 @@ var options = {
     
   }
 }
-app.set('port', (process.env.PORT || 5000));
 
-// views is directory for all template files
-
-app.get('/', function(req, res) {
-//  res.send(parseInput(req.query.input));
-  res.send('Hello');
+router.get('/', (req, res) => {
+  res.send('Hello from LINE bot');
 });
 
-app.post('/', jsonParser, function(req, res) {
+router.post('/', jsonParser, function(req, res) {
 
   if (!req.body || !req.body.events || !Array.isArray(req.body.events) || req.body.events.length === 0) {
     res.status(200).end();
@@ -49,7 +45,7 @@ app.post('/', jsonParser, function(req, res) {
       rplyVal = parseInput(rplyToken, msg); 
     } 
     catch(e) {
-      console.log('catch error');
+      console.log('catch error', e);
     }
   }
 
@@ -62,9 +58,9 @@ app.post('/', jsonParser, function(req, res) {
   res.status(200).end();
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
+// app.listen(app.get('port'), function() {
+//   console.log('Node app is running on port', app.get('port'));
+// });
 
 function replyMsgToLine(rplyToken, rplyVal) {
   let rplyObj = {
@@ -94,24 +90,26 @@ function replyMsgToLine(rplyToken, rplyVal) {
 }
 
 
-function SendMsg(rplyToken, rplyVal) {
-  let rplyObj = {
-    replyToken: rplyToken,
-    messages: rplyVal
-  }
+// function SendMsg(rplyToken, rplyVal) {
+//   let rplyObj = {
+//     replyToken: rplyToken,
+//     messages: rplyVal
+//   }
 
-  let rplyJson = JSON.stringify(rplyObj); 
+//   let rplyJson = JSON.stringify(rplyObj); 
   
-  var request = https.request(options, function(response) {
-    console.log('Status: ' + response.statusCode);
-    console.log('Headers: ' + JSON.stringify(response.headers));
-    response.setEncoding('utf8');
-    response.on('data', function(body) {
-      console.log(body); 
-    });
-  });
-  request.on('error', function(e) {
-    console.log('Request error: ' + e.message);
-  })
-  request.end(rplyJson);
-}
+//   var request = https.request(options, function(response) {
+//     console.log('Status: ' + response.statusCode);
+//     console.log('Headers: ' + JSON.stringify(response.headers));
+//     response.setEncoding('utf8');
+//     response.on('data', function(body) {
+//       console.log(body); 
+//     });
+//   });
+//   request.on('error', function(e) {
+//     console.log('Request error: ' + e.message);
+//   })
+//   request.end(rplyJson);
+// }
+
+module.exports = router;

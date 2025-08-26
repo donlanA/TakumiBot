@@ -645,7 +645,7 @@ function TakumiReply(inputStr, guildFlag = false) {
     if (rplyArr.length == 1) return '你好像還沒打完訊息的樣子？慢慢來也沒關係喔。';
 
     //20%機率不給答案
-    if(Dice(5)==1){
+    if(Dice(5)==1 || inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null){
       rplyArr = ['這個……你還是自己決定吧？',
                  '人生是掌握在自己手裡的！……我的一位朋友曾經這麼說。',
                  '總覺得沒有差很多……',
@@ -699,7 +699,15 @@ function TakumiReply(inputStr, guildFlag = false) {
               '喵……',
               '呼嚕呼嚕。',
               '喵喵……']
+    },
+    {
+      chack: ['睡覺'],
+      text: ['可以休息了嗎？',
+             '我也想睡……',
+             '好。',
+             '晚安。']
     }
+
   ]
 
   for ( i=0 ; i < message.length ; i ++){
