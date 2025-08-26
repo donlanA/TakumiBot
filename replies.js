@@ -715,8 +715,10 @@ function TakumiReply(inputStr, guildFlag = false) {
     
   //以下是運勢功能
   if(inputStr.match('運勢') != null){
-    let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','你還是不要知道比較好'];
-    return '你今天的運勢是——' + rplyArr[Dice(rplyArr.length)-1] + '！';
+    let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','還、還是不要知道比較好'];
+    let Future = rplyArr[Dice(rplyArr.length)-1];
+    
+    return '你今天的運勢是——' + Future + '！';
   } 
   
   //沒有觸發關鍵字則是這個
