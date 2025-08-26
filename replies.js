@@ -644,8 +644,10 @@ function TakumiReply(inputStr, guildFlag = false) {
     
     if (rplyArr.length == 1) return '你好像還沒打完訊息的樣子？慢慢來也沒關係喔。';
 
+    rplyArr.shift();
+
     //20%機率不給答案
-    if(Dice(5)==1 || inputStr.match('選') != null||inputStr.match('決定') != null||inputStr.match('挑') != null){
+    if(Dice(5)==1){
       rplyArr = ['這個……你還是自己決定吧？',
                  '人生是掌握在自己手裡的！……我的一位朋友曾經這麼說。',
                  '總覺得沒有差很多……',
@@ -738,7 +740,7 @@ function TakumiReply(inputStr, guildFlag = false) {
       '我？需要幫忙嗎？',
       '好睏……',
       '哇！是骰子！骰子真有趣！',
-      '（難道喊的我名字本身就很開心？）',
+      '（難道喊我的名字本身就很開心？）',
       '（又在叫我了……）',];
     return rplyArr[Dice(rplyArr.length)-1];
   }
