@@ -3,6 +3,8 @@ require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const { parseInput } = require('./replies.js');
 
+const guild_id = "1407608060113059932"; //有表情的伺服器id
+
 const discordClient = new Client({
     intents:
         [
@@ -34,8 +36,9 @@ discordClient.on('ready', () => {
 discordClient.on('messageCreate', async msg => {
     if (msg.author.bot) return;
 
-    let reply = parseInput(null, msg.content);
-
+    let guildFlag = message.guild?.id === guild_Id;
+    let reply = parseInput(null, msg.content, guildFlag);
+    
     if (reply !== undefined && reply !== null) {
         if (Array.isArray(reply)) {
             let textMsg = reply.find(m => m.type === "text");
@@ -51,3 +54,4 @@ discordClient.on('messageCreate', async msg => {
 discordClient.login(process.env.DISCORD_TOKEN).catch(err => {
     console.error('Discord 登入失敗:', err);
 });
+

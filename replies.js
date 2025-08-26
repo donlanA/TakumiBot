@@ -1,8 +1,5 @@
-const guild_id = "1407608060113059932"; //有表情的伺服器id
-let guild = client.guilds.cache.get(guildId); //取得伺服器
-
 //以下是這個機器人在處理指令的核心。
-function parseInput(rplyToken, inputStr) {
+function parseInput(rplyToken, inputStr, guildFlag = false){
         //此處傳入的變數inputStr是大家輸入的文字訊息。
         //其實LineBot可以讀取的不只有文字訊息，貼圖、圖片等都可辨識。
         //但有看得懂上半段的程式碼的人可能會注意到，我們擋掉了其他的種類。只留文字訊息。
@@ -17,6 +14,8 @@ function parseInput(rplyToken, inputStr) {
         }
         
         //以下這一串是一連串的判定，用來判斷是否有觸發條件的關鍵字。
+
+
         
         //這是我用來測試用的，可以刪掉。
         // if (inputStr.match(/^DvTest/) != null) return DvTest(rplyToken, inputStr) ;
@@ -25,7 +24,7 @@ function parseInput(rplyToken, inputStr) {
         //底下是做為一個擲骰機器人的核心功能。
         //CoC7th系統的判定在此，關鍵字是「句首的cc」，在此的判定使用正則表達式。
         //用 / / 框起來的部分就是正則表達式的範圍， ^ 代表句首，所以 ^cc 就代表句首的cc。
-        if (inputStr.toLowerCase().match(/^cc/)!= null) return CoC7th(rplyToken, inputStr.toLowerCase()) ;      
+        if (inputStr.toLowerCase().match(/^cc/)!= null) return CoC7th(rplyToken, inputStr.toLowerCase(), guildFlag) ;      
         else
           
         //pbta系統判定在此，關鍵字是「句首的pb」。
@@ -37,7 +36,7 @@ function parseInput(rplyToken, inputStr) {
         else
         
         //聊天指令
-        if (inputStr.match('takumi') != null) return TakumiReply(inputStr) ;
+        if (inputStr.match('takumi') != null) return TakumiReply(inputStr, guildFlag) ;
         else
 
 	      //圖片訊息
@@ -439,7 +438,7 @@ function ccbg(){
 }
 
 //cc指令，也就是CoC的主要擲骰控制位置。
-function CoC7th(rplyToken, inputStr){
+function CoC7th(rplyToken, inputStr, guildFlag = false){
   
   //創角
   if (inputStr.toLowerCase().match('創角') != null||inputStr.toLowerCase().match('crt') != null)
@@ -536,7 +535,7 @@ function CoC7th(rplyToken, inputStr){
 
   
 	//傳送表情符號
-  if(guild){
+  if(guildFlag){
 
     if (ReStr.match('恭喜！大成功！')!= null) ReStr = ReStr + '\n<:TakumiyaSleep:1408877984105894001>';
     else
@@ -590,7 +589,7 @@ function SendImg(rplyToken, inputStr) {
   return undefined;
 }
 
-function TakumiManual() {
+function TakumiManual(guildFlag = false) {
     //一般功能說明
     return '\
     呃……嗨。因為這樣那樣的原因，總而言之，我現在就負責擲骰了。\
@@ -608,7 +607,7 @@ function TakumiManual() {
     ';
 }
 
-function TakumiReply(inputStr) { 
+function TakumiReply(inputStr, guildFlag = false) { 
   
   //功能說明
   if (inputStr.match('額外功能') != null) return '\
