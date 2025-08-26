@@ -15,8 +15,6 @@ function parseInput(rplyToken, inputStr, guildFlag = false){
         
         //以下這一串是一連串的判定，用來判斷是否有觸發條件的關鍵字。
 
-
-        
         //這是我用來測試用的，可以刪掉。
         // if (inputStr.match(/^DvTest/) != null) return DvTest(rplyToken, inputStr) ;
         // else   
@@ -591,7 +589,7 @@ function SendImg(rplyToken, inputStr) {
 
 function TakumiManual(guildFlag = false) {
     //一般功能說明
-    return '\
+    let manual = '\
     呃……嗨。因為這樣那樣的原因，總而言之，我現在就負責擲骰了。\
     \n喊出骰子的個數、面數，我就會幫你丟出結果，大家應該都很熟悉了吧。\
     \n修正也交給我吧，簡單的加減運算我還是有信心的！例如：2d4+1、2D10+1d2\
@@ -605,6 +603,10 @@ function TakumiManual(guildFlag = false) {
     \n \
     \n以上功能均繼承至RoboYabaso（HTKRPG的前身）！幫大忙了，謝謝！ \
     ';
+
+    if(guildFlag) manual = manual + '\n<:Takumiya:1409221651467468921>';
+    
+    return manual;
 }
 
 function TakumiReply(inputStr, guildFlag = false) { 
