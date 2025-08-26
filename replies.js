@@ -711,6 +711,12 @@ function TakumiReply(inputStr, guildFlag = false) {
     }
 
   ]
+  if (guildFlag) {
+    
+    message[1].text.push('<:TakumiyaAngry:1407737950862577875>');
+    message[2].text.push('<:TakumiyaSandwitch:1407738773139226644>');
+    message[3].text.push('<:TakumiyaSleep:1408877984105894001>');
+  }
 
   for ( i=0 ; i < message.length ; i ++){
     for ( j=0 ; j < message[i].chack.length ; j ++){
