@@ -30,7 +30,7 @@ function parseInput(rplyToken, inputStr, guildFlag = false){
         else
           
         //使用說明
-        if (inputStr.match('塔庫米使用說明') != null) return TakumiManual() ;
+        if (inputStr.match('使用說明') != null) return TakumiManual() ;
         else
         
         //聊天指令
@@ -592,7 +592,7 @@ function TakumiManual(guildFlag = false) {
     let manual = '\
     呃……嗨。因為這樣那樣的原因，總而言之，我現在就負責擲骰了。\
     \n喊出骰子的個數、面數，我就會幫你丟出結果，大家應該都很熟悉了吧。\
-    \n修正也交給我吧，簡單的加減運算我還是有信心的！例如：2d4+1、2D10+1d2\
+    \n修正也交給我吧，簡單的加減運算我還是有信心的！例如：2d4+1、2D10+1d2。\
     \n需要多筆輸出的話，就先打次數再空一格打骰數。例如：7 3d6、5 2d6+6。\
     \n對了，用大寫D或是小寫d都沒問題喔。 \
     \n \
@@ -615,7 +615,7 @@ function TakumiReply(inputStr, guildFlag = false) {
   if (inputStr.match('額外功能') != null) return '\
 我看看喔……目前實裝的功能有以下這些：\
 \n運勢：你只要提到我的名字和運勢，我就會回答你的運勢。 \
-\n==\
+\n \
 \n隨機選擇：只要提到我的名字和[選、挑、決定]，然後空一格打選項。 \
 記得選項之間也要用空格隔開，我就會幫你挑一個。\
 \n \
@@ -627,16 +627,14 @@ function TakumiReply(inputStr, guildFlag = false) {
     if (inputStr.match('cc') != null) return '\
 【CC功能說明】\
 \n \
-\n和凍豆腐一樣，最常用的是「cc<=[數字]」的一般檢定。\
-\n還有「cc([-2~2])<=[數字]」的獎懲骰。\
+\n基礎指令：\
+\ncc<=[數字]：和凍豆腐一樣，最常用的一般檢定。\
+\ncc([-2~2])<=[數字]：獎懲骰。\
+\ncc>[數字]：幕間成長骰，用於幕間技能成長。\
 \n \
-\n和凍豆腐不同的新增功能如下： \
-\n==\
-\n幕間成長骰：「cc>[數字]」，用於幕間技能成長。\
-\n==\
-\n一鍵創角：「cc 創角/crt [年齡]」，\n若不加上年齡參數，則以悠子/冷嵐房規創角。若加上年齡，則以核心規則創角（含年齡調整）。\
-\n==\
-\n一鍵產生背景：「cc bg」，娛樂性質居多的調查員背景產生器。\
+\n額外指令：\
+\ncc 創角/crt [年齡]」：一鍵創角。\n若不加上年齡參數，則以悠子/冷嵐房規創角。若加上年齡，則以核心規則創角（含年齡調整）。\
+\ncc bg：娛樂性質居多的調查員背景產生器。\
 ';
   else           
     
