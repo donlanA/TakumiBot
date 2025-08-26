@@ -1,4 +1,6 @@
-//------------------------------
+const guild_id = "1407608060113059932"; //有表情的伺服器id
+let guild = client.guilds.cache.get(guildId); //取得伺服器
+
 //以下是這個機器人在處理指令的核心。
 function parseInput(rplyToken, inputStr) {
         //此處傳入的變數inputStr是大家輸入的文字訊息。
@@ -17,8 +19,8 @@ function parseInput(rplyToken, inputStr) {
         //以下這一串是一連串的判定，用來判斷是否有觸發條件的關鍵字。
         
         //這是我用來測試用的，可以刪掉。
-        if (inputStr.match(/^DvTest/) != null) return DvTest(rplyToken, inputStr) ;
-        else   
+        // if (inputStr.match(/^DvTest/) != null) return DvTest(rplyToken, inputStr) ;
+        // else   
           
         //底下是做為一個擲骰機器人的核心功能。
         //CoC7th系統的判定在此，關鍵字是「句首的cc」，在此的判定使用正則表達式。
@@ -29,27 +31,28 @@ function parseInput(rplyToken, inputStr) {
         //pbta系統判定在此，關鍵字是「句首的pb」。
         if (inputStr.toLowerCase().match(/^pb/)!= null) return pbta(inputStr.toLowerCase()) ;      
         else
-		
+          
+        //使用說明
         if (inputStr.match('塔庫米使用說明') != null) return TakumiManual() ;
         else
         
-        //鴨霸獸指令開始於此
+        //聊天指令
         if (inputStr.match('takumi') != null) return TakumiReply(inputStr) ;
         else
 
-	//圖片訊息在此
-        if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;      
-        else
+	      //圖片訊息
+        // if (inputStr.toLowerCase().match('.jpg') != null) return SendImg(rplyToken, inputStr) ;      
+        // else
           
-        //入幫測驗功能判定在此
-        if (inputStr.match('鴨霸幫入幫測驗') != null) return Yababang(inputStr) ;      
-        else 
+        //入幫測驗功能判定
+        // if (inputStr.match('鴨霸幫入幫測驗') != null) return Yababang(inputStr) ;      
+        // else 
 		
-	//通用擲骰判定在此，這邊的判定比較寬鬆。
+	      //通用擲骰判定在此，這邊的判定比較寬鬆。
         //第一部分的 \w 代表「包括底線的任何單詞字元」，所以兩個部份的意涵就是：
         //「不是全部都是空白或中文字，而且裡面含有d的訊息」都會觸發這個判定。
         //為了要正確運作，剩下的判定式還有很多，寫在這邊太冗長所以擺在nomalDiceRoller裡面了。
-	//為什麼判定要放最後呢，不然只要有d都會被當成這個，很不方便
+	      //為什麼判定要放最後呢，不然只要有d都會被當成這個，很不方便
         if (inputStr.match(/\w/)!=null && inputStr.toLowerCase().match(/d/)!=null) {
           return nomalDiceRoller(inputStr);
         }
@@ -58,6 +61,7 @@ function parseInput(rplyToken, inputStr) {
         
 }
 
+//開發者測試
 function DvTest(rplyToken, inputStr){
   let rePly = '開發者測試：\n';
 	let fumbleImgArr =['https://i.imgur.com/ju9UQzA.png','https://i.imgur.com/M3meWXu.png'];
@@ -93,9 +97,9 @@ return undefined;
   return rePly;
 
 }
-        
+
 //這可能是整個程式中最重要的一個函數。它是用來做「擲骰」的最基本部份，會一直被叫出來用。
-//它的功能是，打 Dice(6) ，就會像骰六面骰一樣骰出一個介於1和6間的整數。        
+//它的功能是，打 Dice(6) ，就會像骰六面骰一樣骰出一個介於1和6間的整數。
 function Dice(diceSided){
   //首先，Math.random()是一個製造亂數的函數，它會產生一個介於0～1的隨機數（不包含1）
   //然後我們將它乘上diceSided，就是我們指定的骰子面數。以剛剛的六面骰為例，它會產生一個0~6之間的隨機數（不包含6）。
@@ -141,7 +145,7 @@ function nomalDiceRoller(inputStr){
   //如果不是只有整數，就丟進去DiceCal裡面算算看。
   if(mutiOrNot.toString().match(/\D/)==null )  {
     finalStr= '複數擲骰：'
-    if(mutiOrNot>20) return '不支援20次以上的複數擲骰。';
+    if(mutiOrNot>20) return '不支援20次以上的複數擲骰。這裡只有20顆骰子，所以……';
 
   //把第二部份分拆出來，丟進去待會要介紹的擲骰計算函數當中
   let DiceToRoll = inputStr.toLowerCase().split(' ',2)[1];
@@ -151,8 +155,8 @@ function nomalDiceRoller(inputStr){
       finalStr = finalStr +'\n' + i + '# ' + DiceCal(DiceToRoll).eqStr;
     }
     //報錯，不解釋。
-    if(finalStr.match('200D')!= null) finalStr = '複數擲骰：\n欸欸，不支援200D以上擲骰；哪個時候會骰到兩百次以上？想被淨灘嗎？';
-    if(finalStr.match('D500')!= null) finalStr = '複數擲骰：\n不支援D1和超過D500的擲骰；想被淨灘嗎？';
+    if(finalStr.match('200D')!= null) finalStr = '複數擲骰：\n等等，200D以上沒辦法啦！說到底什麼時候會骰到兩百次以上？';
+    if(finalStr.match('D500')!= null) finalStr = '複數擲骰：\n不支援D1跟超過D500的擲骰……1根本不用骰嘛。500太多了啦。';
     
   } 
   
@@ -199,15 +203,14 @@ function DiceCal(inputStr){
   //寫出算式，這裡使用while將所有「幾d幾」的骰子找出來，一個一個帶入RollDice並取代原有的部分
   while(DiceToRoll.match(/\d+d\d+/)!=null) {
     let tempMatch = DiceToRoll.match(/\d+d\d+/);    
-    if (tempMatch.toString().split('d')[0]>200) return {eqStr :'欸欸，不支援200D以上擲骰；哪個時候會骰到兩百次以上？想被淨灘嗎？'};
-    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return {eqStr :'不支援D1和超過D500的擲骰；想被淨灘嗎？'};
+    if (tempMatch.toString().split('d')[0]>200) return {eqStr :'等等，200D以上沒辦法啦！說到底什麼時候會骰到兩百次以上？'};
+    if (tempMatch.toString().split('d')[1]==1 || tempMatch.toString().split('d')[1]>500) return {eqStr :'不支援D1跟超過D500的擲骰……1根本不用骰嘛。500太多了啦。'};
     DiceToRoll = DiceToRoll.replace(/\d+d\d+/, RollDice(tempMatch));
   }
   
   //計算算式
   let answer = eval(DiceToRoll.toString());
   equationStr= DiceToRoll + ' = ' + answer;
-
   
   //在這裡設定兩個子參數，eq是只有算式，eqStr是把算式加總。
   //在不同情形下可能會有不同應用，所以拆開來，這樣可以少寫一個函數。
@@ -217,8 +220,6 @@ function DiceCal(inputStr){
   }
   
   return Final;
-
-
 }        
 
 //用來把d給展開成算式的函數
@@ -239,7 +240,7 @@ function RollDice(inputStr){
   return finalStr;
 }
 
-//PBTA判定在這裡
+//PBTA判定
 function pbta(inputStr){
   
   //先把句首前面的一段拆出來，我不知道為什麼如果用 \S+ 會報錯，多半是變數種類的問題但我不太懂。
@@ -269,7 +270,8 @@ function pbta(inputStr){
  
 
 }
-        
+
+//cc創角
 function ccCreate(inputStr){
   //大致上的精神是，後面有數字就當作是有年齡調整的傳統創角，沒有的話就是常見的房規創角
   //如果最後面不是數字，就當作是常見的房規創角
@@ -397,6 +399,7 @@ function ccCreate(inputStr){
   
 }
 
+//隨機產生角色背景
 function ccbg(){
   
   let bg = {
@@ -435,11 +438,10 @@ function ccbg(){
 
 }
 
-//這裡是cc指令，也就是CoC的主要擲骰控制位置。
-//這邊的程式碼沒有那麼複雜，所以應該不會講得那麼詳細，可以自己慢慢研究，不難懂的。
+//cc指令，也就是CoC的主要擲骰控制位置。
 function CoC7th(rplyToken, inputStr){
   
-  //先判斷是不是要創角
+  //創角
   if (inputStr.toLowerCase().match('創角') != null||inputStr.toLowerCase().match('crt') != null)
     return ccCreate(inputStr);
   
@@ -474,11 +476,11 @@ function CoC7th(rplyToken, inputStr){
     chack = parseInt(inputStr.split('>',2)[1]) ;
     if (finalRoll>chack||finalRoll>95) {
       let plus =  Dice(10);
-      ReStr = 'CoC7th擲骰【技能成長】：\n(1D100>' + chack + ') → ' + finalRoll + ' → 成功成長' + plus +'點\n最終值為：'+ chack + '+' + plus +'='+ (chack + plus);
+      ReStr = 'CoC7th擲骰【技能成長】：\n(1D100>' + chack + ') → ' + finalRoll + ' → 成功成長' + plus +'點！\n最終值為：'+ chack + '+' + plus +'='+ (chack + plus);
       return ReStr;
     }
     else if (finalRoll<=chack) {
-      ReStr = 'CoC7th擲骰【技能成長】：\n(1D100>' + chack + ') → ' + finalRoll + ' → 沒有成長';
+      ReStr = 'CoC7th擲骰【技能成長】：\n(1D100>' + chack + ') → ' + finalRoll + ' → 沒有成長！';
       return ReStr;
     }
     else return undefined;
@@ -518,12 +520,12 @@ function CoC7th(rplyToken, inputStr){
           else
             if (finalRoll <= 99 && finalRoll > 95 && chack < 50) ReStr = ReStr + finalRoll + ' → 啊！大失敗！';
           else
-            if (finalRoll <= chack/5) ReStr = ReStr + finalRoll + ' → 極限成功';
+            if (finalRoll <= chack/5) ReStr = ReStr + finalRoll + ' → 極限成功！';
           else
-            if (finalRoll <= chack/2) ReStr = ReStr + finalRoll + ' → 困難成功';
+            if (finalRoll <= chack/2) ReStr = ReStr + finalRoll + ' → 困難成功！';
           else
-            if (finalRoll <= chack) ReStr = ReStr + finalRoll + ' → 通常成功';
-          else  ReStr = ReStr + finalRoll + ' → 失敗' ;
+            if (finalRoll <= chack) ReStr = ReStr + finalRoll + ' → 通常成功！';
+          else  ReStr = ReStr + finalRoll + ' → 失敗了……' ;
 
           //浮動大失敗運算
           if (finalRoll <= 99 && finalRoll > 95 && chack >= 50 ){
@@ -533,44 +535,24 @@ function CoC7th(rplyToken, inputStr){
           }
 
   
-	//這是在骰出大成功或大失敗時附加圖片的程式碼，可以自己研究；不想要的話整個刪掉也不影響
-	if (ReStr.match('啊！大失敗')!= null){
-	let fumbleImgArr =['https://i.imgur.com/ju9UQzA.png','https://i.imgur.com/M3meWXu.png','https://i.imgur.com/nWxGZyz.png','https://i.imgur.com/cq0WGxH.png'];
-	let fumbleImg = fumbleImgArr[Dice(fumbleImgArr.length)-1];
-	let fumble = [
-			{
-			type: "text",
-			text: ReStr
-			},
-			{
-			type: "image",
-			originalContentUrl: fumbleImg,
-			previewImageUrl: fumbleImg			
-			}			
-		]
-		SendMsg(rplyToken, fumble);
-		return undefined;
-	}
-	
-	if (ReStr.match('恭喜！大成功')!= null){
-	let CriImgArr =['https://i.imgur.com/jevHZqa.png'];
-	let CriImg = CriImgArr[Dice(CriImgArr.length)-1];
-	let Cri = [
-			{
-			type: "text",
-			text: ReStr
-			},
-			{
-			type: "image",
-			originalContentUrl: CriImg,
-			previewImageUrl: CriImg			
-			}			
-		]
-		SendMsg(rplyToken, Cri);
-		return undefined;
-	}
-	
-          return ReStr;
+	//傳送表情符號
+  if(guild){
+
+    if (ReStr.match('恭喜！大成功！')!= null) ReStr = ReStr + '\n<:TakumiyaSleep:1408877984105894001>';
+    else
+      if (ReStr.match('啊！大失敗！')!= null) ReStr = ReStr + '\n<:TakumiyaAngry:1407737950862577875>';
+    else
+      if (ReStr.match('極限成功！')!= null) ReStr = ReStr + '\n<:TakumiyaSandwitch:1407738773139226644>';
+    else
+      if (ReStr.match('困難成功！')!= null) ReStr = ReStr + '\n<:Takumiya:1409221651467468921>';
+    else
+      if (ReStr.match('通常成功！')!= null) ReStr = ReStr + '\n<:Takumiya:1409221651467468921>';
+    else
+      if (ReStr.match('失敗了……')!= null) ReStr = ReStr + '\n<:TakumiyaCry:1407737942780416080>';
+
+  }
+
+  return ReStr;
 }
 
 //依照關鍵字傳送圖片的函數
@@ -579,71 +561,11 @@ function SendImg(rplyToken, inputStr) {
   {
     chack: ['想相離家出走','阿想離家出走'],
     img: ['https://i.imgur.com/FItqGSH.jpg']
-    //Pimg: ['https://i.imgur.com/FItqGSH.jpg']
   },
   {
     chack: ['我什麼都沒有'],
     img: ['https://i.imgur.com/k4QE5Py.png']
-    //Pimg: ['https://i.imgur.com/k4QE5Py.png']
-  },
-  {
-    chack: ['大家的小三','大家的小3'],
-    img: ['https://i.imgur.com/dKW2EJb.png']
-    //Pimg: ['https://i.imgur.com/dKW2EJb.png']
-  },
-  {
-    chack: ['問號黑人','黑人問號','尼哥問號','問號尼哥','尼格問號','問號尼格'],
-    img: ['https://i.imgur.com/cUR20OZ.png']
-  },
-  {
-    chack: ['貴圈真亂'],
-    img: ['https://i.imgur.com/PalRocR.png']
-  },
-  {
-    chack: ['怕'],
-    img: ['https://i.imgur.com/qXGsztE.png']
-  },
-  {
-    chack: ['你要享受這個過程','妳要享受這個過程'],
-    img: ['https://i.imgur.com/mt7NVzr.png','https://i.imgur.com/v094wOd.png','https://i.imgur.com/F5RfDW2.png','https://i.imgur.com/jWm6f6z.png']
-  },
-  {
-    chack: ['我覺得不行'],
-    img: ['https://i.imgur.com/zXvsvJf.png','https://i.imgur.com/U1AK4kL.png','https://i.imgur.com/4TClOgY.png']
-  },
-  {
-    chack: ['我覺得可以','我覺得其實可以'],
-    img: ['https://i.imgur.com/K5WsXso.png']
-  },
-  {
-    chack: ['警察','就是這個人'],
-    img: ['https://i.imgur.com/7BTPpPQ.png','https://i.imgur.com/nweWacp.png','https://i.imgur.com/j0hIscH.png','https://i.imgur.com/9BDCkJr.png','https://i.imgur.com/2ZiVw9g.png']
-  },
-  {
-    chack: ['姆米','姆咪','母米'],
-    img: ['https://i.imgur.com/j7bMpAO.png','https://i.imgur.com/0AatpWN.png','https://i.imgur.com/S69OoYS.png','https://i.imgur.com/kEGB0Vj.png']
-  },
-  {
-    chack: ['take my money','shut up and'],
-    img: ['https://i.imgur.com/UX0OUc0.png']
-  },
-  {
-    chack: ['接受挑戰','challenge'],
-    img: ['https://i.imgur.com/uUwcxtj.png']
-  },
-  {
-    chack: ['成龍'],
-    img: ['https://i.imgur.com/cq0WGxH.png']
-  },
-  {
-    chack: ['true story','真實故事'],
-    img: ['https://i.imgur.com/88MiBLA.png']
-  },
-  {
-    chack: ['一槍'],
-    img: ['https://i.imgur.com/FnmSMWq.png']
   }
-
 
   ]
   
@@ -754,7 +676,8 @@ function TakumiReply(inputStr) {
     {
       chack: ['蒼月','蒼月衛人'],
       text: ['什麼，難道蒼月那傢伙又怎麼了嗎！？',
-             '蒼月那傢伙，真讓人頭痛……']
+             '蒼月那傢伙，真讓人頭痛……',
+             '蒼月他……應該不在這裡吧……？']
     },
     {
       chack: ['狗叫'],
@@ -762,7 +685,7 @@ function TakumiReply(inputStr) {
              '不要！',
              '……汪。',
              '哈？',
-             '什麼？',
+             '你、你說什麼？',
              '……什麼？',
              '不。',
              '夠了！']
@@ -772,10 +695,10 @@ function TakumiReply(inputStr) {
       text: ['喵喵。',
               '喵？',
               '喵！',
-              '喵～',
+              '喵。',
               '玩夠了吧。',
               '喵……',
-              '喵嗚～',
+              '呼嚕呼嚕。',
               '喵喵……']
     }
   ]
@@ -791,8 +714,8 @@ function TakumiReply(inputStr) {
     
   //以下是運勢功能
   if(inputStr.match('運勢') != null){
-    let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','你還是，不要知道比較好','這應該不關我的事'];
-    return '運勢啊，我覺得，' + rplyArr[Dice(rplyArr.length)-1] + '吧。';
+    let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','你還是不要知道比較好'];
+    return '你今天的運勢是——' + rplyArr[Dice(rplyArr.length)-1] + '！';
   } 
   
   //沒有觸發關鍵字則是這個
@@ -800,11 +723,10 @@ function TakumiReply(inputStr) {
     let rplyArr = [
       '在叫我嗎？',
       '我在這裡。',
-      '什麼事？',
       '我想回去睡覺了……',
       '怎麼了？',
-      '我可以走了嗎？',
-      '需要幫忙嗎？',
+      '……我可以走了嗎？',
+      '我？需要幫忙嗎？',
       '好睏……',
       '哇！是骰子！骰子真有趣！',
       '（難道喊的我名字本身就很開心？）',
