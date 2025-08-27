@@ -614,8 +614,8 @@ function TakumiReply(inputStr, guildFlag = false) {
   //功能說明
   if (inputStr.match('額外功能') != null) return '\
 我看看喔……目前實裝的功能有以下這些：\
-\n運勢：你只要提到我的名字和運勢，我就會回答你的運勢。 \
 \n \
+\n運勢：你只要提到我的名字和運勢，我就會回答你的運勢。 \
 \n隨機選擇：只要提到我的名字和[選、挑、決定]，然後空一格打選項。 \
 記得選項之間也要用空格隔開，我就會幫你挑一個。\
 \n \
@@ -708,6 +708,28 @@ function TakumiReply(inputStr, guildFlag = false) {
              '我也想睡……',
              '好。',
              '晚安。']
+    },
+    {
+      chack: ['早安'],
+      text: ['早啊，昨晚有睡好嗎？',
+             '呼啊……早。',
+             '大家，早安啊！有沒有充滿幹勁啊——！？',
+             '早安，今天也要加油喔。',
+             '早安，吃過早餐了嗎？']
+    },
+    {
+      chack: ['午安'],
+      text: ['午安。今天過得如何？',
+             '嗯，午安。',
+             '午安。下午有想做的事嗎？',
+             '午安。有什麼需要幫忙的，隨時告訴我。']
+    },
+    {
+      chack: ['晚安'],
+      text: ['晚安，我也要去睡了。',
+             '晚安，有個好夢。',
+             '呼啊……晚安……',
+             '晚安，明天見。']
     }
 
   ]
@@ -732,7 +754,23 @@ function TakumiReply(inputStr, guildFlag = false) {
     let rplyArr=['超大吉','大吉','大吉','中吉','中吉','中吉','小吉','小吉','小吉','小吉','凶','凶','凶','大凶','大凶','還、還是不要知道比較好'];
     let Future = rplyArr[Dice(rplyArr.length)-1];
     
-    return '你今天的運勢是——' + Future + '！';
+    let command = '';
+
+    if (Future == '還、還是不要知道比較好') command = '保持現狀總比一整天都被影響心情更好嘛。';
+    else
+      if (Future == '大凶') command = '別擔心，一切都會過去的！';
+    else
+      if (Future == '凶') command = '嘛……總會有辦法的啦。';
+    else
+      if (Future == '小吉') command = '只要是好運就沒問題啦。';
+    else
+      if (Future == '中吉') command = '今天會是好運的一天喔！';
+    else
+      if (Future == '大吉') command = '太好了，今天會是非常幸運的一天！';
+    else
+      if (Future == '超大吉') command = '哇，好強！今天是你超級幸運的一天啊！';
+    
+    return '你今天的運勢是——' + Future + '！\n' + command;
   } 
   
   //沒有觸發關鍵字則是這個
