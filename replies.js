@@ -789,8 +789,11 @@ function TakumiReply(inputStr, guildFlag = false) {
         rplyArr.push(line);
       }
     });
-
     rplyArr.push('========================');
+
+    const numStr = number.toString().padStart(3, '0');
+    rplyArr.push(`http://www.chance.org.tw/籤詩集/淺草金龍山觀音寺一百籤/籤詩網‧淺草金龍山觀音寺一百籤__第${numStr}籤.htm`);
+
     return rplyArr.join("\n");
   }
 
