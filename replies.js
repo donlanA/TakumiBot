@@ -774,8 +774,8 @@ function TakumiReply(inputStr, guildFlag = false) {
     const number = Dice(100);
     const result = lots[number];
     const lines = result.split("\n");
-    let rplyArr = [`你抽到的是——第 ${number} 籤！\n`];
-    rplyArr.push('==================================');
+    let rplyArr = [`你抽到的是——第 ${number} 籤！`];
+    rplyArr.push('========================');
 
     lines.forEach((line, index) => {
 
@@ -790,7 +790,7 @@ function TakumiReply(inputStr, guildFlag = false) {
       }
     });
 
-    rplyArr.push('==================================');
+    rplyArr.push('========================');
     return rplyArr.join("\n");
   }
 
