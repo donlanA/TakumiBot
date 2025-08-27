@@ -16,8 +16,7 @@ var options = {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer HNprujxW6l55p7JhdIDM8p577oezwhMJHAvX2Zt0Hw7WP3SWFJpvPDWHHb9hbJl+HENp70CE27PIqKHj40sQGH5pDBmnshgJCs7dOPFmcNb/EFb3aeTXOj9BwYqILXtL5dBDPCFmTYY2VR+mdVgO8gdB04t89/1O/w1cDnyilFU='
-    
+    'Authorization': 'Bearer ' + process.env.LINE_TOKEN
   }
 }
 
@@ -58,10 +57,6 @@ router.post('/', jsonParser, function(req, res) {
   res.status(200).end();
 });
 
-// app.listen(app.get('port'), function() {
-//   console.log('Node app is running on port', app.get('port'));
-// });
-
 function replyMsgToLine(rplyToken, rplyVal) {
   let rplyObj = {
     replyToken: rplyToken,
@@ -88,28 +83,5 @@ function replyMsgToLine(rplyToken, rplyVal) {
   })
   request.end(rplyJson);
 }
-
-
-// function SendMsg(rplyToken, rplyVal) {
-//   let rplyObj = {
-//     replyToken: rplyToken,
-//     messages: rplyVal
-//   }
-
-//   let rplyJson = JSON.stringify(rplyObj); 
-  
-//   var request = https.request(options, function(response) {
-//     console.log('Status: ' + response.statusCode);
-//     console.log('Headers: ' + JSON.stringify(response.headers));
-//     response.setEncoding('utf8');
-//     response.on('data', function(body) {
-//       console.log(body); 
-//     });
-//   });
-//   request.on('error', function(e) {
-//     console.log('Request error: ' + e.message);
-//   })
-//   request.end(rplyJson);
-// }
 
 module.exports = router;

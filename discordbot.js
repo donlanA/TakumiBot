@@ -23,6 +23,7 @@ const guild_id = "1407608060113059932";
 discordClient.on('messageCreate', async msg => {
     if (msg.author.bot) return;
 
+    // 判斷是否在指定伺服器
     let guildFlag = msg.guild?.id === guild_id;
     let reply = parseInput(null, msg.content, guildFlag);
     
@@ -36,7 +37,6 @@ discordClient.on('messageCreate', async msg => {
     }
 });
 
-// 連線事件監控
 discordClient.on('shardDisconnect', (event, shardID) => {
     console.warn(`⚠️ Shard ${shardID} disconnected (${event.code}). 嘗試重新連線中...`);
 });
