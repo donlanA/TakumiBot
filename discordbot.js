@@ -21,7 +21,7 @@ discordClient.on('ready', () => {
 const guild_id = "1407608060113059932";
 
 discordClient.on('messageCreate', async msg => {
-    if (msg.author.bot) return;
+    // if (msg.author.bot) return;
 
     // 判斷是否在指定伺服器
     let guildFlag = msg.guild?.id === guild_id;
