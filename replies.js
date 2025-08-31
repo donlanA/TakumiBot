@@ -1,7 +1,7 @@
 const lots = require("./lots.json");
 
 //以下是這個機器人在處理指令的核心。
-function parseInput(rplyToken, inputStr, guildFlag = false) {
+function parseInput(rplyToken, inputStr, guildFlag = false, userName = '') {
   //此處傳入的變數inputStr是大家輸入的文字訊息。
   //其實LineBot可以讀取的不只有文字訊息，貼圖、圖片等都可辨識。
   //但有看得懂上半段的程式碼的人可能會注意到，我們擋掉了其他的種類。只留文字訊息。
@@ -36,7 +36,7 @@ function parseInput(rplyToken, inputStr, guildFlag = false) {
       else
 
         //聊天指令
-        if (inputStr.match('takumi') != null) return TakumiReply(inputStr, guildFlag);
+        if (inputStr.match('takumi') != null) return TakumiReply(inputStr, guildFlag, userName);
         else
 
           //圖片訊息
@@ -610,10 +610,12 @@ function TakumiManual(guildFlag = false) {
   return manual;
 }
 
-function TakumiReply(inputStr, guildFlag = false) {
+function TakumiReply(inputStr, guildFlag = false, userName = '') {
 
   //功能說明
-  if (inputStr.match('額外功能') != null) return '\
+  if (inputStr.match('額外功能') != null) {
+
+    return '\
     我看看喔……目前實裝的功能有以下這些：\
     \n \
     \n運勢：只要提到我的名字和[運勢]，我就會回答你的運勢。 \
@@ -624,10 +626,10 @@ function TakumiReply(inputStr, guildFlag = false) {
     \n \
     \n話說這種事交給我沒問題嗎？感覺更適合讓蒼月來做啊……那傢伙的特異科目不是占卜嘛。\
     ';
-  else
 
-    //CC功能說明
-    if (inputStr.match('cc') != null) return '\
+  } else if (inputStr.match('cc') != null) {
+
+    return '\
       【CC功能說明】\
       \n \
       \n基礎指令：\
@@ -639,139 +641,40 @@ function TakumiReply(inputStr, guildFlag = false) {
       \ncc 創角/crt [年齡]」：一鍵創角。\n若不加上年齡參數，則以悠子/冷嵐房規創角。若加上年齡，則以核心規則創角（含年齡調整）。\
       \ncc bg：娛樂性質居多的調查員背景產生器。\
       ';
-    else
 
-      //幫我選
-      if (inputStr.match('選') != null || inputStr.match('決定') != null || inputStr.match('挑') != null) {
-        let rplyArr = inputStr.split(' ');
+  } else if (inputStr.match('選') != null || inputStr.match('決定') != null || inputStr.match('挑') != null) {
 
-        if (rplyArr.length == 1) return '你好像還沒打完訊息的樣子？慢慢來也沒關係喔。';
+    let rplyArr = inputStr.split(' ');
+    if (rplyArr.length == 1) return '你好像還沒打完訊息的樣子？慢慢來也沒關係喔。';
+    rplyArr.shift();
 
-        rplyArr.shift();
-
-        //20%機率不給答案
-        if (Dice(5) == 1) {
-          rplyArr = ['這個……你還是自己決定吧？',
-                     '人生是掌握在自己手裡的！……我的一位朋友曾經這麼說。',
-                     '總覺得沒有差很多……',
-                     '抱歉，我也不清楚……',
-                     '就算是我，也不想做這種選擇啊……',
-                     '不要把這種事交給我決定比較好吧。'];
-          return rplyArr[Dice(rplyArr.length) - 1];
-        }
-
-        let prefixArr = ['我想想喔……我覺得，',
-                         '這個嘛……那就，',
-                         '嗯……'];
-
-        let suffixArr = ['吧。',
-                         '好了。',
-                         '怎麼樣？'];
-
-        let prefix = prefixArr[Dice(prefixArr.length) - 1];
-        let Answer = rplyArr[Dice(rplyArr.length) - 1];
-        let suffix = suffixArr[Dice(suffixArr.length) - 1];
-
-        return prefix + Answer + suffix;
-      }
-
-  // 特定關鍵字回應
-  let message = [
-    {
-      chack: ['蒼月', '蒼月衛人'],
-      text: ['什麼，難道蒼月那傢伙又怎麼了嗎！？',
-             '蒼月那傢伙，真讓人頭痛……',
-             '蒼月他……應該不在這裡吧……？']
-    },
-    {
-      chack: ['狗叫'],
-      text: ['不要。',
-             '不要！',
-             '……汪。',
-             '哈？',
-             '你、你說什麼？',
-             '……什麼？',
-             '不。',
-             '夠了！']
-    },
-    {
-      chack: ['喵'],
-      text: ['喵喵。',
-             '喵？',
-             '喵！',
-             '喵。',
-             '玩夠了吧。',
-             '喵……',
-             '呼嚕呼嚕。',
-             '喵喵……']
-    },
-    {
-      chack: ['睡覺'],
-      text: ['可以休息了嗎？',
-             '好。',
-             '晚安。',
-             '於是，我再度闔上了雙眼，又一次進入了夢鄉。',
-             '我任由怒火熊熊燃燒，就這麼閉上眼睡去了。',
-             '剛躺下，一陣睏意便突然襲來……',
-             '我就這樣放空大腦，結束了一天的活動。',
-             '總之，我決定當天就此休息，便躺到了床上。']
-    },
-    {
-      chack: ['早安'],
-      text: ['早啊，昨晚有睡好嗎？',
-             '呼啊……早。',
-             '大家，早安啊！有沒有充滿幹勁啊——！？',
-             '早安，今天也要加油喔。',
-             '早安，吃過早餐了嗎？']
-    },
-    {
-      chack: ['午安'],
-      text: ['午安。今天過得如何？',
-             '嗯，午安。',
-             '午安。下午有想做的事嗎？',
-             '午安。有什麼需要幫忙的，隨時告訴我。']
-    },
-    {
-      chack: ['晚安'],
-      text: ['晚安，我也要去睡了。',
-             '晚安，有個好夢。',
-             '呼啊……晚安……',
-             '晚安，明天見。']
-    },
-    {
-      chack: ['唸一下那個'],
-      text: ['特防部隊！世界第一！永生不滅！所向無敵！風霜雨雪！絕不氣餒！特防部隊！曠世無匹！',
-             '特防隊是宇宙第一！永遠不滅的無敵部隊！無論遇見什麼都不會氣餒！特防隊是……最強的！',
-             '你的笑容有如太陽般燦爛，照亮了我的心靈……\n你的手有如花瓣，溫柔地包覆我的身體……\n令我心頭小鹿亂撞，如夢一般的時光……\n和你在一起時，我是多麼希望時間能就此停止……',
-             '是夢！這全部都是夢啊！啊哈哈哈哈！這是夢結局！一定是夢結局啦！',
-             '川奈……可以再幫我按摩穴道嗎……猛力地……按下去……',
-             '唔喔喔喔喔！這就是最後的防衛戰啊啊啊啊啊啊啊！',
-             '別、別哭了啦。爸爸不在了的話……就讓我當你的爸爸好了！',
-             '是魚兒！好可愛呀！',
-             '哇！是噴泉！嗶嗶嗶！我在幹什麼呢……',
-             '就像那懸掛在澄澈原野上空的蒼藍之月……一樣。']
+    //20%機率不給答案
+    if (Dice(5) == 1) {
+      rplyArr = ['這個……你還是自己決定吧？',
+                '人生是掌握在自己手裡的！……我的一位朋友曾經這麼說。',
+                '總覺得沒有差很多……',
+                '抱歉，我也不清楚……',
+                '就算是我，也不想做這種選擇啊……',
+                '不要把這種事交給我決定比較好吧。'];
+      return rplyArr[Dice(rplyArr.length) - 1];
     }
 
-  ]
-  // 加入表情符號
-  if (guildFlag) {
-    message[1].text.push('<:TakumiyaAngry:1407737950862577875>');
-    message[2].text.push('<:TakumiyaSandwitch:1407738773139226644>');
-    message[3].text.push('<:TakumiyaSleep:1408877984105894001>');
-  }
+    let prefixArr = ['我想想喔……我覺得，',
+                    '這個嘛……那就，',
+                    '嗯……'];
 
-  // 檢查關鍵字
-  for (i = 0; i < message.length; i++) {
-    for (j = 0; j < message[i].chack.length; j++) {
-      if (inputStr.toLowerCase().match(message[i].chack[j]) != null) {
-        return message[i].text[Dice(message[i].text.length) - 1];
-      }
-    }
+    let suffixArr = ['吧。',
+                    '好了。',
+                    '怎麼樣？'];
 
-  }
+    let prefix = prefixArr[Dice(prefixArr.length) - 1];
+    let Answer = rplyArr[Dice(rplyArr.length) - 1];
+    let suffix = suffixArr[Dice(suffixArr.length) - 1];
 
-  //以下是運勢功能
-  if (inputStr.match('運勢') != null) {
+    return prefix + Answer + suffix;
+
+  } else if (inputStr.match('運勢') != null) {
+
     let rplyArr = ['超大吉', '大吉', '大吉', '中吉', '中吉', '中吉', '小吉', '小吉', '小吉', '小吉', '凶', '凶', '凶', '大凶', '大凶', '還、還是不要知道比較好'];
     let Future = rplyArr[Dice(rplyArr.length) - 1];
 
@@ -786,10 +689,9 @@ function TakumiReply(inputStr, guildFlag = false) {
     else if (Future == '超大吉') command = '哇，好強！今天是你超級幸運的一天啊！';
 
     return '你今天的運勢是——' + Future + '！\n' + command;
-  }
 
-  // 以下是抽籤功能
-  if (inputStr.match('抽籤') != null) {
+  } else if (inputStr.match('抽籤') != null) {
+
     const number = Dice(100);
     const result = lots[number];
     const lines = result.split("\n");
@@ -814,22 +716,128 @@ function TakumiReply(inputStr, guildFlag = false) {
     rplyArr.push(`http://www.chance.org.tw/籤詩集/淺草金龍山觀音寺一百籤/籤詩網‧淺草金龍山觀音寺一百籤__第${numStr}籤.htm`);
 
     return rplyArr.join("\n");
+
   }
 
-  //沒有觸發關鍵字則是這個
-  else {
-    let rplyArr = ['在叫我嗎？',
-                   '我在這裡。',
-                   '我想回去睡覺了……',
-                   '怎麼了？',
-                   '……我可以走了嗎？',
-                   '我？需要幫忙嗎？',
-                   '好睏……',
-                   '哇！是骰子！骰子真有趣！',
-                   '（難道喊我的名字本身就很開心？）',
-                   '（又在叫我了……）'];
-    return rplyArr[Dice(rplyArr.length) - 1];
+  // 特定關鍵字回應
+  let message = [
+    {
+      chack: ['蒼月', '蒼月衛人'],
+      text: ['什麼，難道蒼月那傢伙又怎麼了嗎！？',
+        '蒼月那傢伙，真讓人頭痛……',
+        '蒼月他……應該不在這裡吧……？']
+    },
+    {
+      chack: ['狗叫'],
+      text: ['不要。',
+        '不要！',
+        '……汪。',
+        '哈？',
+        '你、你說什麼？',
+        '……什麼？',
+        '不。',
+        '夠了！']
+    },
+    {
+      chack: ['喵'],
+      text: ['喵喵。',
+        '喵？',
+        '喵！',
+        '喵。',
+        '玩夠了吧。',
+        '喵……',
+        '呼嚕呼嚕。',
+        '喵喵……']
+    },
+    {
+      chack: ['睡覺'],
+      text: ['可以休息了嗎？',
+        '好。',
+        '晚安。',
+        '於是，我再度闔上了雙眼，又一次進入了夢鄉。',
+        '我任由怒火熊熊燃燒，就這麼閉上眼睡去了。',
+        '剛躺下，一陣睏意便突然襲來……',
+        '我就這樣放空大腦，結束了一天的活動。',
+        '總之，我決定當天就此休息，便躺到了床上。']
+    },
+    {
+      chack: ['早安'],
+      text: ['早啊，昨晚有睡好嗎？',
+        '呼啊……早。',
+        '大家，早安啊！有沒有充滿幹勁啊——！？',
+        '早安，今天也要加油喔。',
+        '早安，吃過早餐了嗎？']
+    },
+    {
+      chack: ['午安'],
+      text: ['午安。今天過得如何？',
+        '嗯，午安。',
+        '午安。下午有想做的事嗎？',
+        '午安。有什麼需要幫忙的，隨時告訴我。']
+    },
+    {
+      chack: ['晚安'],
+      text: ['晚安，我也要去睡了。',
+        '晚安，有個好夢。',
+        '呼啊……晚安……',
+        '晚安，明天見。']
+    },
+    {
+      chack: ['唸一下那個'],
+      text: ['特防部隊！世界第一！永生不滅！所向無敵！風霜雨雪！絕不氣餒！特防部隊！曠世無匹！',
+        '特防隊是宇宙第一！永遠不滅的無敵部隊！無論遇見什麼都不會氣餒！特防隊是……最強的！',
+        '你的笑容有如太陽般燦爛，照亮了我的心靈……\n你的手有如花瓣，溫柔地包覆我的身體……\n令我心頭小鹿亂撞，如夢一般的時光……\n和你在一起時，我是多麼希望時間能就此停止……',
+        '是夢！這全部都是夢啊！啊哈哈哈哈！這是夢結局！一定是夢結局啦！',
+        '川奈……可以再幫我按摩穴道嗎……猛力地……按下去……',
+        '唔喔喔喔喔！這就是最後的防衛戰啊啊啊啊啊啊啊！',
+        '別、別哭了啦。爸爸不在了的話……就讓我當你的爸爸好了！',
+        '是魚兒！好可愛呀！',
+        '哇！是噴泉！嗶嗶嗶！我在幹什麼呢……',
+        '就像那懸掛在澄澈原野上空的蒼藍之月……一樣。']
+    },
+{
+  chack: ['我生日', '我的生日'],
+  text: [
+    '{userName}，生日快樂。抱歉，我不太會說那種華麗的祝詞……不過至少想讓你知道，你能平安地走到今天，對我們來說已經很重要了。希望你在接下來的一年裡，每天都能像現在一樣安穩順利，就算偶爾遇到小波折，也能很快被解決掉！……雖然聽起來很微不足道，但我認為這樣就很幸福啦。',
+    '生日快樂啊，{userName}。平常我們總是忙著戰鬥，能夠安安穩穩地迎來生日，其實挺難得的。今天就別想太多，好好放鬆，和重要的人一起笑著度過吧。只要以後當你回想起今天，也能覺得挺溫暖的，就很好啦。',
+    '生日快樂，{userName}。我不太擅長講什麼正式的祝詞，抱歉……總而言之，畢竟生日一年只有一次，在這個屬於你的日子，就以你喜歡的方式度過吧。希望你能好好享受今天，大家都會跟你一起慶祝的喔。',
+    '生日快樂，{userName}。大家常說要一年比一年更好，不過我覺得，只要每天都能安安穩穩地過下去，就已經很棒了。像是吃到喜歡的東西、聽到熟悉的聲音、一成不變的日常，其實都很幸福。所以……所以，呃……希望你今年能多一點這樣的時候！'
+  ]
+}
+
+  ]
+  // 加入表情符號
+  if (guildFlag) {
+    message[1].text.push('<:TakumiyaAngry:1407737950862577875>');
+    message[2].text.push('<:TakumiyaSandwitch:1407738773139226644>');
+    message[3].text.push('<:TakumiyaSleep:1408877984105894001>');
   }
+
+  // 檢查關鍵字
+  for (i = 0; i < message.length; i++) {
+    for (j = 0; j < message[i].chack.length; j++) {
+      if (inputStr.toLowerCase().match(message[i].chack[j]) != null) {
+        return message[i].text[Dice(message[i].text.length) - 1].replace('{userName}', userName);
+      }
+    }
+  }
+
+
+
+  //沒有觸發關鍵字則是這個
+
+  let rplyArr = ['在叫我嗎？',
+    '我在這裡。',
+    '我想回去睡覺了……',
+    '怎麼了？',
+    '……我可以走了嗎？',
+    '我？需要幫忙嗎？',
+    '好睏……',
+    '哇！是骰子！骰子真有趣！',
+    '（難道喊我的名字本身就很開心？）',
+    '（又在叫我了……）'];
+  return rplyArr[Dice(rplyArr.length) - 1];
+
 
 }
 

@@ -25,7 +25,10 @@ discordClient.on('messageCreate', async msg => {
 
     // 判斷是否在指定伺服器
     let guildFlag = msg.guild?.id === guild_id;
-    let reply = parseInput(null, msg.content, guildFlag);
+    // 判斷使用者名稱
+    let displayName = msg.member?.displayName || msg.author.username;
+
+    let reply = parseInput(null, msg.content, guildFlag, displayName);
     
     if (reply !== undefined && reply !== null) {
         if (Array.isArray(reply)) {

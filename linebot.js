@@ -24,7 +24,38 @@ router.get('/', (req, res) => {
   res.send('LINE bot');
 });
 
-router.post('/', jsonParser, function(req, res) {
+// 取得使用者名稱
+function getUserProfile(userId) {
+  return new Promise((resolve, reject) => {
+    const optionsProfile = {
+      host: 'api.line.me',
+      port: 443,
+      path: `/v2/bot/profile/${userId}`,
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + process.env.LINE_TOKEN
+      }
+    };
+
+    const reqProfile = https.request(optionsProfile, (res) => {
+      let body = '';
+      res.on('data', (chunk) => body += chunk);
+      res.on('end', () => {
+        try {
+          let json = JSON.parse(body);
+          resolve(json.displayName); 
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+
+    reqProfile.on('error', (e) => reject(e));
+    reqProfile.end();
+  });
+}
+
+router.post('/', jsonParser,async function(req, res) {
 
   if (!req.body || !req.body.events || !Array.isArray(req.body.events) || req.body.events.length === 0) {
     res.status(200).end();
@@ -39,9 +70,12 @@ router.post('/', jsonParser, function(req, res) {
 
   let rplyVal = null;
   console.log(msg);
+
   if (type == 'message' && msgType == 'text') {
     try {
-      rplyVal = parseInput(rplyToken, msg); 
+      let userId = event.source.userId;
+      let displayName = await getUserProfile(userId); // 呼叫 API 取得名稱
+      rplyVal = parseInput(rplyToken, msg, false, displayName); 
     } 
     catch(e) {
       console.log('catch error', e);
