@@ -6,9 +6,6 @@ const app = express();
 // Discord bot
 require('./discordbot.js');
 
-// QQ bot
-require('./qqbot.js');
-
 // LINE bot router
 // webhook 設為 https://xxx.onrender.com/line
 const lineRouter = require('./linebot.js');
