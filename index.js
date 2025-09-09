@@ -6,7 +6,10 @@ const app = express();
 // Discord bot
 require('./discordbot.js');
 
-// LINE bot 的 router
+// QQ bot
+require('./qqbot.js');
+
+// LINE bot router
 // webhook 設為 https://xxx.onrender.com/line
 const lineRouter = require('./linebot.js');
 app.use('/line', lineRouter);
@@ -14,7 +17,7 @@ app.use('/line', lineRouter);
 // Discord bot 使用根目錄 https://xxx.onrender.com/
 app.get('/', (req, res) => {
   console.log("uptimeRobot enter");
-  res.send("DiscordBot");
+  res.send("TakumiBot");
 });
 
 app.get('/healthz', (req, res) => {
